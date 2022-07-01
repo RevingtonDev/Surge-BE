@@ -3,28 +3,40 @@ package dev.revington.entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int _id;
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private Date dateOfBirth;
     private int mobile;
     private boolean status;
     private String accountType;
 
+    public User() {}
+
+    public User(String email, String password) {
+        setEmail(email);
+        setPassword(password);
+    }
+
     public int getId() {
-        return id;
+        return _id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getFirstName() {
@@ -45,6 +57,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setEmail(String email) {
