@@ -12,20 +12,26 @@ import java.util.List;
 public interface UserRepository extends MongoRepository<User, String> {
 
     @Query(value =
-            "{$or : [" +
-                    "{" +
-                        "_id: {$regex: '?0'}" +
-                    "}," +
-                    "{" +
-                        "firstName: {$regex: '?0'}" +
-                    "}," +
-                    "{" +
-                        "lastName: {$regex: '?0'}" +
-                    "}," +
-                    "{" +
-                        "email: {$regex: '?0'}" +
+        "{ $or : [" +
+                "{" +
+                    "$expr: {" +
+                        "$regexMatch: {" +
+                            "\"input\": {\"$toString\": \"$_id\"}," +
+                            "\"regex\": '?0'" +
+                        "}" +
                     "}" +
-                    "]}")
+                "}," +
+                "{" +
+                        "firstName: {$regex: '?0'}" +
+                "}," +
+                "{" +
+                        "lastName: {$regex: '?0'}" +
+                "}," +
+                "{" +
+                    "email: {$regex: '?0'}" +
+                "}" +
+            "]" +
+        "}")
     public Page<User> find(String param, Pageable pageable);
 
     public Page<User> findById(String param, Pageable pageable);
