@@ -22,10 +22,10 @@ public interface UserRepository extends MongoRepository<User, String> {
                     "}" +
                 "}," +
                 "{" +
-                        "firstName: {$regex: '?0'}" +
+                        "firstName: {$regex: /?0/i}" +
                 "}," +
                 "{" +
-                        "lastName: {$regex: '?0'}" +
+                        "lastName: {$regex: /?0/i}" +
                 "}," +
                 "{" +
                     "email: {$regex: '?0'}" +
