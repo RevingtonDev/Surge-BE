@@ -17,11 +17,11 @@ public class User {
     private String accountType;
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        id = id;
     }
 
     public String getFirstName() {
