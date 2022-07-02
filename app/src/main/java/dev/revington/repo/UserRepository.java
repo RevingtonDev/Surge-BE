@@ -31,12 +31,19 @@ public interface UserRepository extends MongoRepository<User, String> {
                     "email: {$regex: '?0'}" +
                 "}" +
             "]" +
-        "}")
+        "}", fields = "{'firstName': 1, 'lastName': 1, 'dateOfBirth': 1, 'email': 1, 'mobile': 1}")
     public Page<User> find(String param, Pageable pageable);
 
-    public Page<User> findById(String param, Pageable pageable);
+    @Query(fields = "{'firstName': 1, 'lastName': 1, 'dateOfBirth': 1, 'email': 1, 'mobile': 1}")
+    public Page<User> findById(int param, Pageable pageable);
+    @Query(fields = "{'firstName': 1, 'lastName': 1, 'dateOfBirth': 1, 'email': 1, 'mobile': 1}")
     public Page<User> findByFirstName(String param, Pageable pageable);
+    @Query(fields = "{'firstName': 1, 'lastName': 1, 'dateOfBirth': 1, 'email': 1, 'mobile': 1}")
     public Page<User> findByLastName(String param, Pageable pageable);
+    @Query(fields = "{'firstName': 1, 'lastName': 1, 'dateOfBirth': 1, 'email': 1, 'mobile': 1}")
     public Page<User> findByEmail(String param, Pageable pageable);
+
+    public List<User> findByEmail(String param);
+    public List<User> findById(int param);
 
 }
