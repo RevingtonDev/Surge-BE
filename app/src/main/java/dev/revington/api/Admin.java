@@ -66,4 +66,40 @@ public class Admin {
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
 
+    @PostMapping("/users")
+    public ResponseEntity<JSONObject> getUsers(HttpServletRequest req, HttpServletResponse res,
+                                               @RequestParam(required = false, defaultValue = "1") int page,
+                                               @RequestParam(required = false, defaultValue = ".") String type,
+                                               @RequestParam(required = false, defaultValue = "10") int limit) {
+        User admin = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(admin, ROLE)) != null)
+            return response;
+
+        if (page > 0)
+            page--;
+        else
+            page = 0;
+
+        if(limit < 1)
+            limit = 10;
+
+        Pageable pageable = Pageable.ofSize(limit).withPage(page);
+        Page<User> users;
+        if (type.equals(Parameter.STUDENT))
+            users = repo.findStudents(pageable);
+        else if(type.equals(Parameter.ADMIN))
+            users = repo.findAdmins(admin.getId(), pageable);
+        else
+            users = repo.findAll(admin.getId(), pageable);
+
+        JSONObject result = (JSONObject) StatusHandler.S200.clone();
+        result.put(Parameter.ELEMENTS, users.getTotalElements());
+        result.put(Parameter.PAGES, users.getTotalPages());
+        result.put(Parameter.RESULTS, users.getContent());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
