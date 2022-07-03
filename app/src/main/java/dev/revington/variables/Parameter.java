@@ -10,7 +10,6 @@ public class Parameter {
     // Client application cookie names
     public static final String COOKIE_TOKEN = "access_token";
 
-
     // API return parameter values
     public static final String TEMPORARY_TYPE = "temp";
 }
