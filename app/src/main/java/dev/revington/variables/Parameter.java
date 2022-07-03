@@ -12,4 +12,7 @@ public class Parameter {
 
     // API return parameter values
     public static final String TEMPORARY_TYPE = "temp";
+    public static final String RESULTS = "results";
+    public static final String PAGES = "pages";
+    public static final String ELEMENTS = "elements";
 }
