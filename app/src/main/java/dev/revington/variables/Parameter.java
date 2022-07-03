@@ -15,4 +15,8 @@ public class Parameter {
     public static final String RESULTS = "results";
     public static final String PAGES = "pages";
     public static final String ELEMENTS = "elements";
+
+    // Roles
+    public static final String ADMIN = "admin";
+    public static final String STUDENT = "student";
 }
