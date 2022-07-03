@@ -25,6 +25,7 @@ public class User {
     private Date dateOfBirth;
     private int mobile;
     private boolean status;
+    private boolean isTemporary;
     private String accountType;
 
     public User() {}
@@ -32,6 +33,22 @@ public class User {
     public User(String email, String password) {
         setEmail(email);
         setPassword(password);
+    }
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
+
+    public boolean isTemporary() {
+        return isTemporary;
+    }
+
+    public void setTemporary(boolean temporary) {
+        isTemporary = temporary;
     }
 
     public int getId() {
