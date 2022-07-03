@@ -12,6 +12,7 @@ import dev.revington.variables.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONObject;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,7 +46,9 @@ public class Authenticate {
             return new ResponseEntity<>(StatusHandler.E401, HttpStatus.UNAUTHORIZED);
 
         User owner = list.get(0);
-        if(owner.getPassword().equals(Crypto.getMD5(user.getPassword()))) {
+        String encryptedPass = Crypto.getMD5(user.getPassword());
+        LoggerFactory.getLogger(Authenticate.class.getName()).info(encryptedPass);
+        if(owner.getPassword().equals(encryptedPass)) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
             Token token;
@@ -56,14 +59,17 @@ public class Authenticate {
                 return new ResponseEntity<>(StatusHandler.E500, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
+            JSONObject result =  (JSONObject) StatusHandler.S200.clone();
+            if(owner.isTemporary())
+                result.put(Parameter.TEMPORARY_TYPE, true);
+
             accessRepo.deleteById(token.getId());
             accessRepo.save(token);
             CookieUtil.createCookie(res, Parameter.COOKIE_TOKEN, token.getToken(), "/", CookieUtil.getDomain(req), true, false, (memorize.equals("yes") ? 365 * 24 * 60 * 60 : -1));
 
-            return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(StatusHandler.E500, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(StatusHandler.E401, HttpStatus.UNAUTHORIZED);
     }
 
 }
