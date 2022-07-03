@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.management.relation.Role;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/admin")
@@ -47,7 +50,7 @@ public class Admin {
             return new ResponseEntity<>(StatusHandler.E1004, HttpStatus.NOT_ACCEPTABLE);
 
         User rookie = new User(user.getAsString(Parameter.EMAIL), Crypto.getMD5(user.getAsString(Parameter.PASSWORD)));
-        rookie.setId(Application.ID++);
+        rookie.set_id(Application.ID++);
         rookie.setAccountType(user.getAsString(Parameter.ACCOUNT_TYPE));
         rookie.setTemporary(true);
         repo.save(rookie);

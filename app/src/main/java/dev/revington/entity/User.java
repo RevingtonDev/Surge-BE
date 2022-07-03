@@ -51,14 +51,6 @@ public class User {
         isTemporary = temporary;
     }
 
-    public int getId() {
-        return _id;
-    }
-
-    public void setId(int id) {
-        this._id = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
