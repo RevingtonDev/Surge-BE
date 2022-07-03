@@ -1,5 +1,6 @@
 package dev.revington.entity;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Timestamp;
@@ -7,17 +8,26 @@ import java.sql.Timestamp;
 @Document(collection = "notes")
 public class Note {
 
-    private int Id;
+    private String id;
+    private int studentId;
     private String title;
     private String description;
-    private Timestamp time;
+    private long time;
 
-    public int getId() {
-        return Id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public String getId() {
+        return id;
+    }
+
+    public int getStudentID() {
+        return studentId;
+    }
+
+    public void setStudentID(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getTitle() {
@@ -36,11 +46,11 @@ public class Note {
         this.description = description;
     }
 
-    public Timestamp getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(long time) {
         this.time = time;
     }
 }
