@@ -16,10 +16,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.management.relation.Role;
 import java.util.Base64;
@@ -39,22 +36,7 @@ public class Admin {
 
     @PutMapping("/create")
     public ResponseEntity<JSONObject> createAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody JSONObject user) {
-        String token = "";
-        Cookie[] cookies = req.getCookies();
-
-        if(cookies.length <= 0)
-            return new ResponseEntity<>(StatusHandler.E1002, HttpStatus.UNAUTHORIZED);
-
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(Parameter.COOKIE_TOKEN))
-                token = new String(Base64.getUrlDecoder().decode(cookie.getValue()));
-        }
-        cookies = null;
-
-        if (token.equals(""))
-            return new ResponseEntity<>(StatusHandler.E1002, HttpStatus.UNAUTHORIZED);
-
-        User admin = AccessToken.validate(req, res, accessRepo, repo, token);
+        User admin = AccessToken.validate(req, res, accessRepo, repo);
         if(admin == null)
             return new ResponseEntity<>(StatusHandler.E1002, HttpStatus.UNAUTHORIZED);
 
