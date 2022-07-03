@@ -69,4 +69,19 @@ public class Student {
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
 
+    @DeleteMapping("/note")
+    public ResponseEntity<JSONObject> removeNote(HttpServletRequest req, HttpServletResponse res, @RequestParam String id) {
+        User student = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(student, ROLE)) != null)
+            return response;
+
+        Optional<Note> noteObject;
+        if((noteObject = noteRepo.findById(new ObjectId(id).toString())).isPresent())
+            noteRepo.delete(noteObject.get());
+
+        return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
+    }
+
 }
