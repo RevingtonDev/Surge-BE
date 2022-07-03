@@ -84,4 +84,22 @@ public class Student {
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
 
+    @PutMapping("/note/update")
+    public ResponseEntity<JSONObject> updateNote(HttpServletRequest req, HttpServletResponse res,
+                                                 @RequestBody Note note) {
+        User student = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(student, ROLE)) != null)
+            return response;
+
+        note.setTime(new Date().getTime());
+        note.setStudentID(student.getId());
+
+        if(noteRepo.findById(note.getId()).isPresent())
+            noteRepo.save(note);
+
+        return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
+    }
+
 }
