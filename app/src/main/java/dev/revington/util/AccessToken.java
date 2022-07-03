@@ -6,6 +6,7 @@ import dev.revington.repo.TokenRepository;
 import dev.revington.repo.UserRepository;
 import dev.revington.security.Crypto;
 import dev.revington.variables.Parameter;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,8 @@ public class AccessToken {
         return token;
     }
 
-    public static User validate(HttpServletRequest req, HttpServletResponse res, TokenRepository repo, UserRepository userRepo, String token) {
+    public static User validate(HttpServletRequest req, HttpServletResponse res, TokenRepository repo, UserRepository userRepo) {
+        String token = retrieveClientToken(req);
         List<Token> tokens = repo.findByToken(token);
         List<User> users = null;
         if(tokens.isEmpty() || new Timestamp(new Date().getTime()).compareTo(tokens.get(0).getExpires()) > 0 || (users = userRepo.findById(tokens.get(0).getId()).stream().toList()).isEmpty()) {
@@ -44,6 +46,19 @@ public class AccessToken {
         }
 
          return users.get(0);
+    }
+
+    public static String retrieveClientToken(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+
+        if(cookies == null || cookies.length < 1)
+            return "";
+
+        for (Cookie cookie : cookies)
+            if(cookie.getName().equals(Parameter.COOKIE_TOKEN))
+                return new String(Base64.getUrlDecoder().decode(cookie.getValue().getBytes(StandardCharsets.UTF_8)));
+
+        return "";
     }
 
 }
