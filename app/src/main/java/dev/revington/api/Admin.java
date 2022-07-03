@@ -102,4 +102,34 @@ public class Admin {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<JSONObject> searchUser(HttpServletRequest req, HttpServletResponse res,
+                                                 @RequestParam(required = false, defaultValue = "0") int page,
+                                                 @RequestParam(required = false, defaultValue = "10") int limit,
+                                                 @RequestParam String query) {
+        User admin = AccessToken.validate(req, res, accessRepo, repo);
+
+        if (page > 0)
+            page--;
+        else
+            page = 0;
+
+        if(limit < 1)
+            limit = 10;
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(admin, ROLE)) != null)
+            return response;
+
+        Pageable pageable = Pageable.ofSize(limit).withPage(page);
+        Page<User> users = repo.find(query, admin.getId(), admin.getEmail(), pageable);
+
+        JSONObject result = (JSONObject) StatusHandler.S200.clone();
+        result.put(Parameter.PAGES, users.getTotalPages());
+        result.put(Parameter.ELEMENTS, users.getTotalElements());
+        result.put(Parameter.RESULTS, users.getContent());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
