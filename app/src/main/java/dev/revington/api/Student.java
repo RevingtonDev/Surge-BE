@@ -102,4 +102,38 @@ public class Student {
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
 
+    @PostMapping("/notes")
+    public ResponseEntity<JSONObject> getNotes(HttpServletRequest req, HttpServletResponse res,
+                                               @RequestParam(required = false, defaultValue = "1") int page,
+                                               @RequestParam(required = false, defaultValue = "10") int limit,
+                                               @RequestParam(required = false, defaultValue = "false") boolean oldest) {
+        User student = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(student, ROLE)) != null)
+            return response;
+
+        if (page > 0)
+            page--;
+        else
+            page = 0;
+
+        if(limit < 1)
+            limit = 10;
+
+        Pageable pageable = Pageable.ofSize(limit).withPage(page);
+        Page<Note> notes;
+        if(oldest)
+            notes = noteRepo.findByClientIdOrderDescending(student.getId(), pageable);
+        else
+            notes = noteRepo.findByClientId(student.getId(), pageable);
+
+        JSONObject result = (JSONObject) StatusHandler.S200.clone();
+        result.put(Parameter.PAGES, notes.getTotalPages());
+        result.put(Parameter.ELEMENTS, notes.getTotalElements());
+        result.put(Parameter.RESULTS, notes.getContent());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }
