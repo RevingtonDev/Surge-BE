@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
@@ -23,7 +25,8 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ID = repo.findAllByIdSortDescending().get(0).getId() + 1;
+        List<User> users = repo.findAllByIdSortDescending();
+        ID = users.isEmpty() ? 0 : users.get(0).getId() + 1;
 
         if(!repo.findByEmail("root@surge.com").isEmpty())
             return;
