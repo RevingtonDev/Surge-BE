@@ -44,4 +44,7 @@ public interface UserRepository extends MongoRepository<User, Integer> {
     public Page<User> findByEmail(String param, Pageable pageable);
 
     public List<User> findByEmail(String param);
+
+    @Query(value = "{}", sort = "{ '_id': -1 }")
+    List<User> findAllByIdSortDescending();
 }
