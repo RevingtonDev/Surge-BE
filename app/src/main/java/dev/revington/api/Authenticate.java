@@ -19,10 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class Authenticate {
     TokenRepository accessRepo;
 
     // API for user authentication
-    @PostMapping(value = "/cred", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/credentials", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject> authenticate(HttpServletRequest req, HttpServletResponse res, @RequestBody User user, @RequestParam(required = false, defaultValue = "no") String memorize) {
         List<User> list = repo.findByEmail(user.getEmail());
 
@@ -47,7 +45,6 @@ public class Authenticate {
 
         User owner = list.get(0);
         String encryptedPass = Crypto.getMD5(user.getPassword());
-        LoggerFactory.getLogger(Authenticate.class.getName()).info(encryptedPass);
         if(owner.getPassword().equals(encryptedPass)) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
@@ -55,7 +52,7 @@ public class Authenticate {
             try {
                 token = AccessToken.generateToken(owner, timestamp);
             } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                LoggerFactory.getLogger(Authenticate.class.getName()).error(e.getMessage());
                 return new ResponseEntity<>(StatusHandler.E500, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
