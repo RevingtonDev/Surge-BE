@@ -69,4 +69,16 @@ public class Authenticate {
             return new ResponseEntity<>(StatusHandler.E401, HttpStatus.UNAUTHORIZED);
     }
 
+    @DeleteMapping("/credentials")
+    public ResponseEntity<JSONObject> logOut(HttpServletRequest req, HttpServletResponse res) {
+        User user = AccessToken.validate(req, res, accessRepo, repo);
+
+        if(user != null)
+            accessRepo.deleteById(user.getId());
+
+        CookieUtil.clearCookie(res, Parameter.COOKIE_TOKEN, CookieUtil.getDomain(req), "/", true, false);
+
+        return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
+    }
+
 }
