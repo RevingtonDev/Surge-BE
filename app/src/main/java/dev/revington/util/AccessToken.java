@@ -5,11 +5,15 @@ import dev.revington.entity.User;
 import dev.revington.repo.TokenRepository;
 import dev.revington.repo.UserRepository;
 import dev.revington.security.Crypto;
+import dev.revington.status.StatusHandler;
 import dev.revington.variables.Parameter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import net.minidev.json.JSONObject;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -19,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,14 +43,14 @@ public class AccessToken {
 
     public static User validate(HttpServletRequest req, HttpServletResponse res, TokenRepository repo, UserRepository userRepo) {
         String token = retrieveClientToken(req);
-        List<Token> tokens = repo.findByToken(token);
-        List<User> users = null;
-        if(tokens.isEmpty() || new Timestamp(new Date().getTime()).compareTo(tokens.get(0).getExpires()) > 0 || (users = userRepo.findById(tokens.get(0).getId()).stream().toList()).isEmpty()) {
+        Optional<Token> accessToken = repo.findByToken(token);
+        Optional<User> user;
+        if(accessToken.isEmpty() || new Timestamp(new Date().getTime()).compareTo(accessToken.get().getExpires()) > 0 || (user = userRepo.findById(accessToken.get().getId())).isEmpty()) {
             CookieUtil.clearCookie(res, Parameter.COOKIE_TOKEN, CookieUtil.getDomain(req), "/", true, false);
             return null;
         }
 
-         return users.get(0);
+         return user.get();
     }
 
     public static String retrieveClientToken(HttpServletRequest req) {
