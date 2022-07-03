@@ -1,13 +1,7 @@
 package dev.revington.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -17,7 +11,7 @@ import java.util.Date;
 public class User {
 
     @Id
-    private int _id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -35,12 +29,12 @@ public class User {
         setPassword(password);
     }
 
-    public int get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
-    public void set_id(int _id) {
-        this._id = _id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isTemporary() {
