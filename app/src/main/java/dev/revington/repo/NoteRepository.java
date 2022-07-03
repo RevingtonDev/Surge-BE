@@ -11,6 +11,12 @@ import java.util.Optional;
 
 public interface NoteRepository extends MongoRepository<Note, String> {
 
+    @Query(value = "{studentId: ?0}", sort = "{time: 1}")
+    public Page<Note> findByClientId(int clientId, Pageable pageable);
+
+    @Query(value = "{studentId: ?0}", sort = "{time: -1}")
+    public Page<Note> findByClientIdOrderDescending(int clientId, Pageable pageable);
+
     @Override
     @Query(value = "{_id: ObjectId(?0)}")
     Optional<Note> findById(String s);
