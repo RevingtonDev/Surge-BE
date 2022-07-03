@@ -29,4 +29,7 @@ public class StatusHandler {
 
     // Role doesn't have permission to visit provided route response
     public static JSONObject E1003 = createStatus(1003, "Trespassing.");
+
+    // Email as a primary key; duplication attempt response
+    public static JSONObject E1004 = createStatus(1004, "Account already exists.");
 }
