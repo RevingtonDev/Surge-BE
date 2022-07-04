@@ -19,4 +19,5 @@ public class Parameter {
     // Roles
     public static final String ADMIN = "admin";
     public static final String STUDENT = "student";
+    public static final String UNIFIED = "uni";
 }
