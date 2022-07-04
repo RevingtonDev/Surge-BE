@@ -50,7 +50,7 @@ public class Student {
             JSONObject result = (JSONObject) StatusHandler.S200.clone();
             if(content)
                 result.put(Parameter.RESULTS, student);
-            return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
 
