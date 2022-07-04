@@ -55,12 +55,12 @@ public class Authenticate {
     // API for user authentication
     @PostMapping(value = "/credentials", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject> authenticate(HttpServletRequest req, HttpServletResponse res, @RequestBody User user, @RequestParam(required = false, defaultValue = "no") String memorize) {
-        List<User> list = repo.findByEmail(user.getEmail());
+        Optional<User> client = repo.findByEmail(user.getEmail());
 
-        if(list.isEmpty())
+        if(!client.isPresent())
             return new ResponseEntity<>(StatusHandler.E401, HttpStatus.UNAUTHORIZED);
 
-        User owner = list.get(0);
+        User owner = client.get();
         String encryptedPass = Crypto.getMD5(user.getPassword());
         if(owner.getPassword().equals(encryptedPass)) {
             Timestamp timestamp = new Timestamp(new Date().getTime());

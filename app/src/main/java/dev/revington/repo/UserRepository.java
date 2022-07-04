@@ -55,7 +55,7 @@ public interface UserRepository extends MongoRepository<User, Integer> {
     @Query(fields = "{password: 0}")
     public Page<User> findByEmail(String param, Pageable pageable);
 
-    public List<User> findByEmail(String param);
+    public Optional<User> findByEmail(String param);
 
     @Query(fields = "{ password: 0 }")
     public Optional<User> findById(int param);
