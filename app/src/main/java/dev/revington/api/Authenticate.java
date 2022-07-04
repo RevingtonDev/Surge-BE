@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController()
 @RequestMapping("/auth")
@@ -67,6 +68,27 @@ public class Authenticate {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else
             return new ResponseEntity<>(StatusHandler.E401, HttpStatus.UNAUTHORIZED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<JSONObject> updateAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody User user) {
+        User client = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if ((response = AccessToken.tokenAuthorization(user, Parameter.UNIFIED)) != null)
+            return response;
+
+        Optional<User> prev = repo.findById(client.getId());
+        if(prev.isEmpty() || !prev.get().isTemporary())
+            return new ResponseEntity<>(StatusHandler.S200, HttpStatus.UNAUTHORIZED);
+
+        user.setTemporary(false);
+        repo.save(user);
+
+        accessRepo.deleteById(user.getId());
+        CookieUtil.clearCookie(res, Parameter.COOKIE_TOKEN, CookieUtil.getDomain(req), "/", true, false);
+
+        return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
 
     @DeleteMapping("/credentials")
