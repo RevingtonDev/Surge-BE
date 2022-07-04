@@ -43,7 +43,7 @@ public class Admin {
             JSONObject result = (JSONObject) StatusHandler.S200.clone();
             if(content)
                 result.put(Parameter.RESULTS, admin);
-            return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
 
