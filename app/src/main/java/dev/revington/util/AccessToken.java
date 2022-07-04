@@ -70,7 +70,7 @@ public class AccessToken {
         if(user == null)
         return new ResponseEntity<>(StatusHandler.E1002, HttpStatus.UNAUTHORIZED);
 
-        if(!user.getAccountType().equals(role))
+        if(!role.equals(Parameter.UNIFIED) || !user.getAccountType().equals(role))
             return new ResponseEntity<>(StatusHandler.E1003, HttpStatus.UNAUTHORIZED);
 
         return null;
