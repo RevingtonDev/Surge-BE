@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(allowCredentials = "true", origins = {"http://localhost:3000"})
 public class Admin {
 
     private final String ROLE = Parameter.ADMIN;
@@ -45,7 +46,6 @@ public class Admin {
             return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
         }
     }
-
 
     @PutMapping("/create")
     public ResponseEntity<JSONObject> createAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody JSONObject user) {
