@@ -11,7 +11,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONObject;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,13 +18,9 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class AccessToken {
@@ -70,7 +65,7 @@ public class AccessToken {
         if(user == null)
         return new ResponseEntity<>(StatusHandler.E1002, HttpStatus.UNAUTHORIZED);
 
-        if(!role.equals(Parameter.UNIFIED) || !user.getAccountType().equals(role))
+        if(!role.equals(Parameter.UNIFIED) && !user.getAccountType().equals(role))
             return new ResponseEntity<>(StatusHandler.E1003, HttpStatus.UNAUTHORIZED);
 
         return null;
