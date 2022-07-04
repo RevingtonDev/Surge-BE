@@ -38,22 +38,6 @@ public class Student {
     @Autowired
     NoteRepository noteRepo;
 
-    @PostMapping("/authorize")
-    public ResponseEntity<JSONObject> getInfo(HttpServletRequest req, HttpServletResponse res,
-                                              @RequestParam(required = false, defaultValue = "false") boolean content) {
-        User student = AccessToken.validate(req, res, accessRepo, repo);
-
-        ResponseEntity<JSONObject> response;
-        if((response = AccessToken.tokenAuthorization(student, ROLE)) != null)
-            return response;
-        else {
-            JSONObject result = (JSONObject) StatusHandler.S200.clone();
-            if(content)
-                result.put(Parameter.RESULTS, student);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-    }
-
     @PutMapping("/note")
     public ResponseEntity<JSONObject> createNote(HttpServletRequest req, HttpServletResponse res, @RequestBody Note note) {
         User student = AccessToken.validate(req, res, accessRepo, repo);

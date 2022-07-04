@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @RestController()
 @RequestMapping("/auth")
-@CrossOrigin(allowCredentials = "true", origins = {"http://localhost:3000"})
+@CrossOrigin(allowCredentials = "true", origins = {"http://localhost:3000/"})
 public class Authenticate {
 
     @Autowired
@@ -35,6 +35,22 @@ public class Authenticate {
 
     @Autowired
     TokenRepository accessRepo;
+
+    @PostMapping("/authorize")
+    public ResponseEntity<JSONObject> getInfo(HttpServletRequest req, HttpServletResponse res,
+                                              @RequestParam(required = false, defaultValue = "false") boolean content) {
+        User admin = AccessToken.validate(req, res, accessRepo, repo);
+
+        ResponseEntity<JSONObject> response;
+        if((response = AccessToken.tokenAuthorization(admin, Parameter.UNIFIED)) != null)
+            return response;
+        else {
+            JSONObject result = (JSONObject) StatusHandler.S200.clone();
+            if(content)
+                result.put(Parameter.RESULTS, admin);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+    }
 
     // API for user authentication
     @PostMapping(value = "/credentials", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -31,22 +31,6 @@ public class Admin {
     @Autowired
     UserRepository repo;
 
-    @PostMapping("/authorize")
-    public ResponseEntity<JSONObject> getInfo(HttpServletRequest req, HttpServletResponse res,
-                                              @RequestParam(required = false, defaultValue = "false") boolean content) {
-        User admin = AccessToken.validate(req, res, accessRepo, repo);
-
-        ResponseEntity<JSONObject> response;
-        if((response = AccessToken.tokenAuthorization(admin, ROLE)) != null)
-            return response;
-        else {
-            JSONObject result = (JSONObject) StatusHandler.S200.clone();
-            if(content)
-                result.put(Parameter.RESULTS, admin);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-    }
-
     @PutMapping("/create")
     public ResponseEntity<JSONObject> createAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody JSONObject user) {
         User admin = AccessToken.validate(req, res, accessRepo, repo);
