@@ -79,7 +79,7 @@ public class Authenticate {
 
             accessRepo.deleteById(token.getId());
             accessRepo.save(token);
-            CookieUtil.createCookie(res, Parameter.COOKIE_TOKEN, token.getToken(), "/", CookieUtil.getDomain(req), true, false, (memorize.equals("yes") ? 365 * 24 * 60 * 60 : -1));
+            CookieUtil.createCookie(res, Parameter.COOKIE_TOKEN, token.getToken(), "/", CookieUtil.getDomain(req), true, false, (memorize.equals("yes") && !owner.isTemporary() ? 365 * 24 * 60 * 60 : -1));
 
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else
