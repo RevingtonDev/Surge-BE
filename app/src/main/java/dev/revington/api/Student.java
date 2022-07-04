@@ -24,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
+@CrossOrigin(allowCredentials = "true", origins = {"http://localhost:3000"})
 public class Student {
 
     private final String ROLE = Parameter.STUDENT;
