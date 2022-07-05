@@ -32,4 +32,7 @@ public class StatusHandler {
 
     // Email as a primary key; duplication attempt response
     public static JSONObject E1004 = createStatus(1004, "Account already exists.");
+
+    // Blocked account response
+    public static JSONObject E1005 = createStatus(1005, "Account is blocked.");
 }
