@@ -33,8 +33,8 @@ public class Application implements CommandLineRunner {
 
         User root = new User();
         root.setId(ID++);
-        root.setFirstName("root");
-        root.setLastName("user");
+        root.setFirstName("Root");
+        root.setLastName("User");
         root.setEmail("root@surge.com");
         root.setPassword(Crypto.getMD5("root"));
         root.setStatus(true);
