@@ -62,6 +62,9 @@ public class Authenticate {
         User owner = client.get();
         String encryptedPass = Crypto.getMD5(user.getPassword());
         if(owner.getPassword().equals(encryptedPass)) {
+            if(!owner.isStatus() /* True if account is blocked. */)
+                return new ResponseEntity<>(StatusHandler.E1005, HttpStatus.UNAUTHORIZED);
+
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
             Token token;
