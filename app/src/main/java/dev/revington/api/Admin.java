@@ -46,6 +46,7 @@ public class Admin {
         rookie.setId(Application.ID++);
         rookie.setAccountType(user.getAsString(Parameter.ACCOUNT_TYPE));
         rookie.setTemporary(true);
+        rookie.setStatus(true);
         repo.save(rookie);
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }
