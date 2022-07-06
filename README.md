@@ -8,7 +8,7 @@
 
 > **DELETE** - Removes access token cookie and the token from database(if it contains).
 
-### `'/authorize?content='`
+### `/authorize?content=`
 
 > **POST** - Checks if the client access token is valid.\
 > - content (boolean) - if the user details should return
