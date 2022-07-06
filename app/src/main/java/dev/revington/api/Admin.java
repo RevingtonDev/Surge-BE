@@ -7,15 +7,19 @@ import dev.revington.repo.UserRepository;
 import dev.revington.security.Crypto;
 import dev.revington.status.StatusHandler;
 import dev.revington.util.AccessToken;
+import dev.revington.util.CookieUtil;
 import dev.revington.variables.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +34,12 @@ public class Admin {
 
     @Autowired
     UserRepository repo;
+
+    @Autowired
+    JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    String from;
 
     @PutMapping("/create")
     public ResponseEntity<JSONObject> createAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody JSONObject user) {
@@ -47,6 +57,15 @@ public class Admin {
         rookie.setAccountType(user.getAsString(Parameter.ACCOUNT_TYPE));
         rookie.setTemporary(true);
         rookie.setStatus(true);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setSubject("Account Verification.");
+        message.setTo(rookie.getEmail());
+        message.setText(String.format(Parameter.UserNotificationEmail, req.getRequestURL().toString().replaceAll(req.getRequestURI(), ""), user.getAsString(Parameter.PASSWORD)));
+
+        mailSender.send(message);
+
         repo.save(rookie);
         return new ResponseEntity<>(StatusHandler.S200, HttpStatus.OK);
     }

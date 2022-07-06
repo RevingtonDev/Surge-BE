@@ -20,4 +20,18 @@ public class Parameter {
     public static final String ADMIN = "admin";
     public static final String STUDENT = "student";
     public static final String UNIFIED = "uni";
+
+    // Mail
+    public static String UserNotificationEmail = """
+                Surge
+                
+                Hello,
+                    An administrator has been created an account on Surge using this email address. Please
+                visit to %s and fill out your details in order to complete your account.
+                
+                Temporary password : %s
+                
+                Thank you, Regards
+                Surge
+            """;
 }
