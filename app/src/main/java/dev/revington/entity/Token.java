@@ -3,9 +3,7 @@ package dev.revington.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.crypto.SecretKey;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Document(collection = "tokens")
 public class Token {

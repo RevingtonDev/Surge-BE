@@ -7,7 +7,6 @@ import dev.revington.repo.UserRepository;
 import dev.revington.security.Crypto;
 import dev.revington.status.StatusHandler;
 import dev.revington.util.AccessToken;
-import dev.revington.util.CookieUtil;
 import dev.revington.variables.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
