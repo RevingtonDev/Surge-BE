@@ -91,17 +91,18 @@ public class Authenticate {
     @PutMapping("/update")
     public ResponseEntity<JSONObject> updateAccount(HttpServletRequest req, HttpServletResponse res, @RequestBody User user) {
         User client = AccessToken.validate(req, res, accessRepo, repo);
-
         ResponseEntity<JSONObject> response;
-        if ((response = AccessToken.tokenAuthorization(user, Parameter.UNIFIED)) != null)
+        if ((response = AccessToken.tokenAuthorization(client, Parameter.UNIFIED)) != null)
             return response;
 
-        Optional<User> prev = repo.findById(client.getId());
-        if(prev.isEmpty() || !prev.get().isTemporary())
-            return new ResponseEntity<>(StatusHandler.S200, HttpStatus.UNAUTHORIZED);
-
-        user.setTemporary(false);
-        repo.save(user);
+        client.setTemporary(false);
+        client.setFirstName(user.getFirstName());
+        client.setPassword(user.getLastName());
+        client.setLastName(user.getLastName());
+        client.setMobile(user.getMobile());
+        client.setDateOfBirth(user.getDateOfBirth());
+        client.setPassword(Crypto.getMD5(user.getPassword()));
+        repo.save(client);
 
         accessRepo.deleteById(user.getId());
         CookieUtil.clearCookie(res, Parameter.COOKIE_TOKEN, CookieUtil.getDomain(req), "/", true, false);
