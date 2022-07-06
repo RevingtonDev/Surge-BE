@@ -28,7 +28,6 @@ public class AccessToken {
     public static Token generateToken(User user, Timestamp timestamp) throws NoSuchAlgorithmException {
         Token token = new Token();
         token.setId(user.getId());
-        token.setKey(Crypto.generateKey());
         token.setToken(Crypto.getMD5(Base64.getEncoder().encodeToString(user.getEmail().getBytes(StandardCharsets.UTF_8))) +
                 Crypto.getMD5(user.getFirstName() + " " + user.getLastName()) +
                 Crypto.getMD5(Base64.getEncoder().encodeToString(timestamp.toString().getBytes(StandardCharsets.UTF_8))));

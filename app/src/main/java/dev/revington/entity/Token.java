@@ -13,16 +13,7 @@ public class Token {
     @Id
     private int id;
     private String token;
-    private byte[] key;
     private long expires;
-
-    public byte[] getKey() {
-        return key;
-    }
-
-    public void setKey(byte[] key) {
-        this.key = key;
-    }
 
     public int getId() {
         return id;
