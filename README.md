@@ -10,12 +10,12 @@
 
 ### `/authorize?content=`
 
-> **POST** - Checks if the client access token is valid.\
+> **POST** - Checks if the client access token is valid.
 > - content (boolean) - if the user details should return
 
 ### `/update `
 
-> **PUT** - Updates temporary account details. \
+> **PUT** - Updates temporary account details. 
 >```
 >{
 >   firstName : string, 
