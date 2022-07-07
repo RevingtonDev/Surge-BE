@@ -34,4 +34,7 @@ public class Parameter {
                 Thank you, Regards
                 Surge
             """;
+
+    // Headers
+    public static final String REQUEST_ORIGIN = "origin";
 }

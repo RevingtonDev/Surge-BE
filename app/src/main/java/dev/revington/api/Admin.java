@@ -61,7 +61,7 @@ public class Admin {
         message.setFrom(from);
         message.setSubject("Account Verification.");
         message.setTo(rookie.getEmail());
-        message.setText(String.format(Parameter.UserNotificationEmail, req.getRequestURL().toString().replaceAll(req.getRequestURI(), ""), user.getAsString(Parameter.PASSWORD)));
+        message.setText(String.format(Parameter.UserNotificationEmail, req.getHeader(Parameter.REQUEST_ORIGIN), user.getAsString(Parameter.PASSWORD)));
 
         mailSender.send(message);
 
